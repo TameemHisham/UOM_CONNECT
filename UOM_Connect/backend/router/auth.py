@@ -7,9 +7,26 @@ from auth.hash_utils import hash_password, verify_password
 from auth.jwt_handler import create_access_token
 from schemas.auth import UserSignup, UserLogin, Token
 from datetime import timedelta
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from auth.jwt_handler import decode_access_token
+
+security = HTTPBearer()
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    return payload
+
+
+@router.get("/me")
+def get_me(current_user: dict = Depends(get_current_user)):
+    return {"user": current_user}
 
 
 def get_db():

@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
+import { checkAuth } from "../utils/auth";
 import "./LoginForm.css";
 
 function LoginForm() {
-  // if (localStorage.getItem("token"))
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const verify = async () => {
+      const isAuthenticated = await checkAuth();
+      if (isAuthenticated) {
+        navigate("/chat");
+      }
+    };
+    verify();
+  }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
