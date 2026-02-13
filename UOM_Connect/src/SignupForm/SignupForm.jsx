@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../api/auth";
 import "./SignupForm.css";
 
 function SignupForm() {
@@ -9,6 +10,9 @@ function SignupForm() {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -17,13 +21,40 @@ function SignupForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
-    console.log("Signup submitted:", formData);
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = await signup({
+        username: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Store token
+      localStorage.setItem("token", data.access_token);
+
+      // Redirect to dashboard
+      alert("Signup successful!");
+      navigate("/login");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +77,8 @@ function SignupForm() {
         <h1 className="title">Create Account</h1>
         <p className="subtitle">Sign up to get started with UOM Connect</p>
 
+        {/* {error && <div className="error-message">{error}</div>} */}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="fullName">Full Name</label>
@@ -57,6 +90,7 @@ function SignupForm() {
               value={formData.fullName}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -70,6 +104,7 @@ function SignupForm() {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -83,6 +118,7 @@ function SignupForm() {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -96,11 +132,12 @@ function SignupForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="signup-btn">
-            Sign Up
+          <button type="submit" className="signup-btn" disabled={loading}>
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 

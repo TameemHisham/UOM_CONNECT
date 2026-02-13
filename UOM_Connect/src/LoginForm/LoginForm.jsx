@@ -1,15 +1,39 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
 import "./LoginForm.css";
 
 function LoginForm() {
+  // if (localStorage.getItem("token"))
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login submitted:", { email, password, rememberMe });
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await login({ email, password });
+      // Store token
+      if (rememberMe) {
+        localStorage.setItem("token", data.access_token);
+      } else {
+        sessionStorage.setItem("token", data.access_token);
+      }
+
+      // Redirect to dashboard
+      alert("Login successful!");
+      navigate("/chat"); // Uncomment when you have a dashboard
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,6 +56,8 @@ function LoginForm() {
         <h1 className="title">UOM Connect</h1>
         <p className="subtitle">Sign in to your account to continue</p>
 
+        {/* {error && <div className="error-message">{error}</div>} */}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -42,6 +68,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -54,6 +81,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -63,6 +91,7 @@ function LoginForm() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
+                disabled={loading}
               />
               Remember me
             </label>
@@ -71,8 +100,8 @@ function LoginForm() {
             </a>
           </div>
 
-          <button type="submit" className="sign-in-btn">
-            Sign In
+          <button type="submit" className="sign-in-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
