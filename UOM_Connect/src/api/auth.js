@@ -8,9 +8,10 @@ export const signup = async (userData) => {
     },
     body: JSON.stringify(userData),
   });
-
   if (!response.ok) {
     const error = await response.json();
+    // console.log("BACKEND ERROR:", error);
+
     throw new Error(error.detail || "Signup failed");
   }
 

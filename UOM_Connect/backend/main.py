@@ -2,8 +2,8 @@
 from fastapi import FastAPI
 from router import auth
 from db.db_config import engine, Base
-from db.models import User, Admin   # ← IMPORTANT
-from fastapi.middleware.cors import CORSMiddleware
+from db.models import User, Admin
+from fastapi.middleware.cors import CORSMiddleware  # ← IMPORTANT DONT TOUCH
 
 
 app = FastAPI()
@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Create the tables if not created!
 # Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.router)

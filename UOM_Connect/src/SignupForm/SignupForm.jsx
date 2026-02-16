@@ -5,7 +5,7 @@ import "./SignupForm.css";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
-    fullName: "",
+    full_name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -39,7 +39,7 @@ function SignupForm() {
 
     try {
       const data = await signup({
-        username: formData.fullName,
+        full_name: formData.full_name,
         email: formData.email,
         password: formData.password,
       });
@@ -85,9 +85,9 @@ function SignupForm() {
             <input
               type="text"
               id="fullName"
-              name="fullName"
+              name="full_name"
               placeholder="Enter your full name"
-              value={formData.fullName}
+              value={formData.full_name}
               onChange={handleChange}
               required
               disabled={loading}

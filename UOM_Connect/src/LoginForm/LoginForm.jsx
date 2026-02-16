@@ -39,7 +39,7 @@ function LoginForm() {
 
       // Redirect to dashboard
       alert("Login successful!");
-      navigate("/chat"); // Uncomment when you have a dashboard
+      navigate("/chat");
     } catch (err) {
       setError(err.message);
     } finally {
