@@ -44,19 +44,17 @@ function SignupForm() {
         password: formData.password,
       });
 
-      // Store token
+      // FIX 4: The token is now valid and retrieved from the updated backend
       localStorage.setItem("token", data.access_token);
 
-      // Redirect to dashboard
-      alert("Signup successful!");
-      navigate("/login");
+      // FIX 5: Redirect straight to chat instead of login
+      navigate("/chat");
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="signup-container">
       <div className="signup-card">
@@ -143,7 +141,8 @@ function SignupForm() {
 
         <p className="login-text">
           Already have an account?{" "}
-          <Link to="/" className="login-link">
+          {/* FIX 6: Changed link to /login to stop the circular root redirect */}
+          <Link to="/login" className="login-link">
             Sign in
           </Link>
         </p>

@@ -1,0 +1,219 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0eaff;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.avatarBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #6b2c91;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+}
+.name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1e0a2e;
+}
+.meta {
+  font-size: 12px;
+  color: #9b72b0;
+  margin-top: 1px;
+}
+
+.shareBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #f2e8f9;
+  border: none;
+  border-radius: 10px;
+  color: #6b2c91;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.13s;
+}
+
+.shareBtn:hover {
+  background: #ead5f5;
+}
+
+/* Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(3px);
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 26px;
+  width: 380px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e0a2e;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.closeBtn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.codeRow,
+.linkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.code {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #6b2c91;
+  font-family: monospace;
+}
+
+.link {
+  flex: 1;
+  font-size: 12px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyBtn {
+  padding: 6px 12px;
+  background: #6b2c91;
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.13s;
+  flex-shrink: 0;
+}
+
+.copyBtn:hover {
+  background: #5a2579;
+}
+
+.emailRow {
+  display: flex;
+  gap: 8px;
+}
+
+.emailInput {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  color: #1e0a2e;
+  transition: border-color 0.13s;
+}
+
+.emailInput:focus {
+  border-color: #6b2c91;
+}
+.emailInput::placeholder {
+  color: #d1d5db;
+}
+
+.sendBtn {
+  padding: 10px 16px;
+  background: #6b2c91;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.13s;
+  flex-shrink: 0;
+}
+
+.sendBtn:hover {
+  background: #5a2579;
+}
+.sendBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successMsg {
+  font-size: 13px;
+  color: #16a34a;
+  margin-top: 8px;
+}
+.errorMsg {
+  font-size: 13px;
+  color: #dc2626;
+  margin-top: 8px;
+}

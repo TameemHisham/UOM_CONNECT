@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
+    "fastapi-mail>=1.6.2",
     "fastapi[standard]>=0.128.6",
     "passlib>=1.7.4",
     "psycopg2>=2.9.11",

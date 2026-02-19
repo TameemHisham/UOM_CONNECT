@@ -1,13 +1,7 @@
 import { useEffect, useRef } from "react";
 import MessageBubble from "./MessageBubble";
-import "./MessageList.css";
+import styles from "./MessageList.module.css";
 
-/**
- * MessageList
- * Scrollable container for all messages. Auto-scrolls to latest.
- * Props:
- *   messages (array) – array of message objects for the active group
- */
 export default function MessageList({ messages }) {
   const bottomRef = useRef(null);
 
@@ -16,9 +10,12 @@ export default function MessageList({ messages }) {
   }, [messages]);
 
   return (
-    <div className="list">
-      {messages.map((msg) => (
-        <MessageBubble key={msg.id} message={msg} />
+    <div className={styles.list}>
+      {messages.length === 0 && (
+        <p className={styles.empty}>No messages yet. Say hello! 👋</p>
+      )}
+      {messages.map((msg, i) => (
+        <MessageBubble key={msg.id ?? i} message={msg} />
       ))}
       <div ref={bottomRef} />
     </div>

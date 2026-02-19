@@ -1,31 +1,25 @@
 import { useState } from "react";
-import "./MessageInput.css";
+import styles from "./MessageInput.module.css";
 
-/**
- * MessageInput
- * Controlled text field + send button.
- * Props:
- *   onSend (fn) – called with trimmed message string on submit
- */
 export default function MessageInput({ onSend }) {
   const [text, setText] = useState("");
 
-  const handleSend = () => {
+  const send = () => {
     if (!text.trim()) return;
     onSend(text.trim());
     setText("");
   };
 
   return (
-    <div className="wrapper">
+    <div className={styles.wrapper}>
       <input
-        className="input"
+        className={styles.input}
         value={text}
         onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-        placeholder="Type a message..."
+        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+        placeholder="Type a message…"
       />
-      <button className="sendBtn" onClick={handleSend} title="Send">
+      <button className={styles.sendBtn} onClick={send}>
         <svg
           width="16"
           height="16"

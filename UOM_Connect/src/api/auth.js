@@ -1,52 +1,35 @@
-const API_URL = "http://localhost:8000/auth";
+const BASE = "http://localhost:8000";
 
-export const signup = async (userData) => {
-  const response = await fetch(`${API_URL}/signup`, {
+export async function login({ email, password }) {
+  const res = await fetch(`${BASE}/auth/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
   });
-  if (!response.ok) {
-    const error = await response.json();
-    // console.log("BACKEND ERROR:", error);
-
-    throw new Error(error.detail || "Signup failed");
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Login failed");
   }
+  return res.json(); // { access_token, token_type }
+}
 
-  return response.json();
-};
-
-export const login = async (credentials) => {
-  const response = await fetch(`${API_URL}/login`, {
+export async function signup({ full_name, email, password }) {
+  const res = await fetch(`${BASE}/auth/signup`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ full_name, email, password }),
   });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || "Login failed");
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Signup failed");
   }
-  return response.json();
-};
+  return res.json();
+}
 
-export const getCurrentUser = async (token) => {
-  const response = await fetch(`${API_URL}/me`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
+export async function getCurrentUser(token) {
+  const res = await fetch(`${BASE}/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || "Failed to get user info");
-  }
-
-  return response.json();
-};
+  if (!res.ok) throw new Error("Unauthorized");
+  return res.json(); // { user: { sub: full_name, exp: ... } }
+}

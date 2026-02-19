@@ -1,24 +1,27 @@
-import Avatar from "../Avatar";
-import "./MessageBubble.css";
+import styles from "./MessageBubble.module.css";
 
-/**
- * MessageBubble
- * Props:
- *   message (object) – { id, sender, initials, text, time, own }
- */
+function getInitials(name = "") {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
 export default function MessageBubble({ message }) {
-  const { sender, initials, text, time, own } = message;
-
+  const { sender, text, time, own } = message;
   return (
-    <div className={`row ${own ? "own" : ""}`}>
-      {!own && <Avatar loc="header" initials={initials} size={34} />}
-
-      <div className="content">
-        {!own && <span className="sender">{sender}</span>}
-        <div className={`bubble ${own ? "bubbleOwn" : "bubbleOther"}`}>
+    <div className={`${styles.row} ${own ? styles.own : ""}`}>
+      {!own && <div className={styles.avatar}>{getInitials(sender)}</div>}
+      <div className={styles.content}>
+        {!own && <span className={styles.sender}>{sender}</span>}
+        <div
+          className={`${styles.bubble} ${own ? styles.bubbleOwn : styles.bubbleOther}`}
+        >
           {text}
         </div>
-        <span className="time">{time}</span>
+        <span className={styles.time}>{time}</span>
       </div>
     </div>
   );

@@ -1,13 +1,107 @@
-.page {
-  min-width: 100dvw;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+.chatPage {
+  width: 100dvw;
+  height: 100dvh;
   background: #1a1a2e;
   display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", sans-serif;
+  position: relative;
 }
 
-.container {
-  min-height: 100dvh;
-  min-width: 100dvw;
+.chatContainer {
+  width: 100%;
+  height: 100%;
   display: flex;
   overflow: hidden;
+}
+
+/* Right side wrapper — needed for the WS status bar */
+.chatMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* WebSocket status banners */
+.wsBar {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px;
+  flex-shrink: 0;
+}
+
+.wsConnecting {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.wsDisconnected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Welcome screen */
+.welcomeScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  gap: 12px;
+  padding: 40px;
+}
+
+.welcomeIcon {
+  width: 72px;
+  height: 72px;
+  background: #f2e8f9;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.welcomeTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e0a2e;
+}
+
+.welcomeSub {
+  font-size: 14px;
+  color: #9b72b0;
+  text-align: center;
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+/* Logout button */
+.logoutBtn {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 7px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  z-index: 50;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }

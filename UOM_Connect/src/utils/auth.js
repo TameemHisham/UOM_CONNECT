@@ -1,3 +1,4 @@
+// src/utils/auth.js
 import { getCurrentUser } from "../api/auth";
 
 export const checkAuth = async () => {
@@ -14,4 +15,14 @@ export const checkAuth = async () => {
     sessionStorage.removeItem("token");
     return false;
   }
+};
+
+// FIX 3: Removed 'async' so these return strings/null synchronously, not Promises
+export const getToken = () => {
+  return localStorage.getItem("token") || sessionStorage.getItem("token");
+};
+
+export const clearToken = () => {
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
 };

@@ -3,18 +3,20 @@
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  border-bottom: 1px solid #b27ad591;
+  border-top: 1px solid #f0eaff;
+  background: #fff;
   flex-shrink: 0;
 }
 
 .input {
   flex: 1;
-  border: 1.5px solid #b27ad591;
-  border-radius: 10px;
+  border: 1.5px solid #e6d4f0;
+  border-radius: 24px;
   padding: 10px 16px;
-  font-size: 13.5px;
-  color: #2d1b5e;
+  font-size: 14px;
+  color: #1e0a2e;
   font-family: inherit;
+  background: #faf5fd;
   outline: none;
   transition: border-color 0.15s;
 }
@@ -22,9 +24,8 @@
 .input:focus {
   border-color: #6b2c91;
 }
-
 .input::placeholder {
-  color: #b0a0cc;
+  color: #c49fd8;
 }
 
 .sendBtn {
@@ -40,14 +41,13 @@
   flex-shrink: 0;
   transition:
     background 0.15s,
-    transform 0.15s;
+    transform 0.1s;
 }
 
 .sendBtn:hover {
-  background: #5a247a;
+  background: #5a2579;
   transform: scale(1.05);
 }
-
 .sendBtn:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
