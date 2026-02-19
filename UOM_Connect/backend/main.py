@@ -6,10 +6,6 @@ from typing import Dict, List
 from datetime import datetime
 import json
 
-# NEW IMPORTS FOR DATABASE
-from db.db_config import SessionLocal
-from db.models import User, Message
-
 app = FastAPI()
 
 app.add_middleware(
@@ -59,27 +55,7 @@ async def websocket_endpoint(websocket: WebSocket, group_id: int, user_name: str
     try:
         while True:
             data = await websocket.receive_text()
-
-            # 1. Open a new database session
-            db = SessionLocal()
-            try:
-                # 2. Find the user by their full_name
-                user = db.query(User).filter(
-                    User.full_name == user_name).first()
-                if user:
-                    # 3. Save the message to the database
-                    new_msg = Message(
-                        content=data,
-                        user_id=user.id,
-                        group_id=group_id,
-                        timestamp=datetime.utcnow()
-                    )
-                    db.add(new_msg)
-                    db.commit()
-            finally:
-                db.close()  # Always close the session
-
-            # 4. Broadcast to other users
+            # FIX: must serialize to string, not pass a dict
             await manager.broadcast_to_group(
                 json.dumps({
                     "sender": user_name,

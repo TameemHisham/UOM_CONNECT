@@ -3,19 +3,20 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/sidebar/Sidebar";
 import ChatPanel from "./components/chat/ChatPanel";
 import { getCurrentUser } from "../api/auth";
-import { getUserGroups, getGroupMessages } from "../api/groups";
-import "./Chat.css";
+import { getUserGroups } from "../api/groups";
 import { getToken, clearToken } from "../utils/auth";
 import "./Chat.css";
+
 function Chat() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [groups, setGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [wsStatus, setWsStatus] = useState("disconnected");
+  const [wsStatus, setWsStatus] = useState("disconnected"); // "connecting" | "connected" | "disconnected"
   const socketRef = useRef(null);
 
+  // On mount: load user + groups
   useEffect(() => {
     const token = getToken();
     if (!token) {
@@ -33,10 +34,9 @@ function Chat() {
     getUserGroups(token)
       .then((data) => setGroups(data || []))
       .catch(console.error);
-  }, [navigate]);
+  }, []);
 
-  // FIX 2: Make this useEffect async (by wrapping the logic in an async function)
-  // to fetch history before establishing the WebSocket connection
+  // WebSocket: connect when group + user are ready
   useEffect(() => {
     if (!selectedGroupId || !user) return;
 
@@ -45,58 +45,35 @@ function Chat() {
 
     setMessages([]);
     setWsStatus("connecting");
-    const token = getToken();
 
-    // Fetch message history first
-    const loadHistoryAndConnect = async () => {
+    const ws = new WebSocket(
+      `ws://localhost:8000/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
+    );
+    socketRef.current = ws;
+
+    ws.onopen = () => setWsStatus("connected");
+    ws.onclose = () => setWsStatus("disconnected");
+    ws.onerror = () => setWsStatus("disconnected");
+
+    ws.onmessage = (event) => {
       try {
-        const history = await getGroupMessages(selectedGroupId, token);
-        // Map the history to include the 'own' flag so styling works correctly
-        const formattedHistory = history.map((msg) => ({
-          ...msg,
-          own: msg.sender === user.sub,
-        }));
-        setMessages(formattedHistory);
-      } catch (err) {
-        console.error("Failed to load message history:", err);
-      }
-
-      // Then establish the WebSocket connection
-      const ws = new WebSocket(
-        `ws://localhost:8000/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
-      );
-      socketRef.current = ws;
-
-      ws.onopen = () => setWsStatus("connected");
-      ws.onclose = () => setWsStatus("disconnected");
-      ws.onerror = () => setWsStatus("disconnected");
-
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: Date.now() + Math.random(), // Unique ID for key mapping
-              sender: data.sender,
-              text: data.text,
-              time: data.time,
-              own: data.sender === user.sub,
-            },
-          ]);
-        } catch (e) {
-          console.error("Bad WS message", e);
-        }
-      };
-    };
-
-    loadHistoryAndConnect();
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
+        const data = JSON.parse(event.data);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + Math.random(),
+            sender: data.sender,
+            text: data.text,
+            time: data.time,
+            own: data.sender === user.sub,
+          },
+        ]);
+      } catch (e) {
+        console.error("Bad WS message", e);
       }
     };
+
+    return () => ws.close();
   }, [selectedGroupId, user]);
 
   const handleSend = (text) => {
