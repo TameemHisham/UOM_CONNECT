@@ -1,13 +1,6 @@
 import Avatar from "../Avatar";
 import "./GroupListItem.css";
 
-/**
- * GroupListItem
- * Props:
- *   group    (object)  – group data object
- *   isActive (boolean) – highlights the row when true
- *   onClick  (fn)      – called when the row is clicked
- */
 export default function GroupListItem({ group, isActive, onClick }) {
   return (
     <div className={`item ${isActive ? "active" : ""}`} onClick={onClick}>

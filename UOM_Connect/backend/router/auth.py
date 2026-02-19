@@ -27,8 +27,6 @@ def get_db():
     with SessionLocal() as session:
         yield session
 
-# FIX 1: Return a Token model on signup and generate an access_token
-
 
 @router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
 def signup(user: UserSignup, db: Session = Depends(get_db)):
@@ -59,7 +57,6 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
 
     if not db_user or not verify_password(user.password, db_user.password):
-        # FIX 2: Corrected the error message to state "email" instead of "full_name"
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password"

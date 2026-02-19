@@ -38,7 +38,6 @@ export default function ChatHeader({ group }) {
     if (!inviteEmail.trim()) return;
     setInviteStatus("sending");
     try {
-      // FIX: Reorder the arguments to (email, joinCode, token)
       await sendInviteEmail(inviteEmail.trim(), group.join_code, getToken());
       setInviteStatus("sent");
       setInviteEmail("");
@@ -78,7 +77,6 @@ export default function ChatHeader({ group }) {
         </button>
       </header>
 
-      {/* Share / Invite modal */}
       {showShare && (
         <div className={styles.overlay} onClick={() => setShowShare(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -92,7 +90,6 @@ export default function ChatHeader({ group }) {
               </button>
             </div>
 
-            {/* Join code */}
             <p className={styles.label}>Join Code</p>
             <div className={styles.codeRow}>
               <span className={styles.code}>{group.join_code}</span>
@@ -101,7 +98,6 @@ export default function ChatHeader({ group }) {
               </button>
             </div>
 
-            {/* Join link */}
             <p className={styles.label} style={{ marginTop: 16 }}>
               Share Link
             </p>
@@ -112,7 +108,6 @@ export default function ChatHeader({ group }) {
               </button>
             </div>
 
-            {/* Email invite */}
             <p className={styles.label} style={{ marginTop: 16 }}>
               Send Email Invite
             </p>

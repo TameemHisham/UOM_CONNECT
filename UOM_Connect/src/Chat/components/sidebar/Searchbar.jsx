@@ -1,11 +1,5 @@
 import "./SearchBar.css";
 
-/**
- * SearchBar
- * Props:
- *   value    (string)   – controlled input value
- *   onChange (function) – called with new string on every keystroke
- */
 export default function SearchBar({ value, onChange }) {
   return (
     <div className="wrapper">

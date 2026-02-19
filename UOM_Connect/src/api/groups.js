@@ -1,9 +1,17 @@
 // src/api/groups.js
-const API_URL = "http://localhost:8000/groups";
+// const API_URL = "http://localhost:8000/groups";
+// const API_URL = "http://10.204.191.97:5173/groups";
+// const API_URL = "http://192.168.1.42:8000/groups";
+// const API_URL =
+// "https://unlucent-averie-unprecipitantly.ngrok-free.dev /groups";
+const API_URL = `${import.meta.env.VITE_API_URL}/groups`;
 
 export const getUserGroups = async (token) => {
   const response = await fetch(`${API_URL}/me`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true", // bypass header
+    },
   });
   if (!response.ok) {
     const errorData = await response.json();
@@ -56,6 +64,19 @@ export const sendInviteEmail = async (email, joinCode, token) => {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.detail || "Failed to send invite");
+  }
+  return response.json();
+};
+export const getGroupMessages = async (groupId, token) => {
+  const response = await fetch(`${API_URL}/${groupId}/messages`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to fetch messages");
   }
   return response.json();
 };

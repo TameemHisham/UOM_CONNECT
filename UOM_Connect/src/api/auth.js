@@ -1,16 +1,25 @@
-const BASE = "http://localhost:8000";
-
+// const BASE = "http://localhost:8000";
+// const BASE = "http://192.168.1.42:8000";
+// const BASE = "https://unlucent-averie-unprecipitantly.ngrok-free.dev";
+const BASE = import.meta.env.VITE_API_URL;
+console.log(BASE);
 export async function login({ email, password }) {
+  console.log("Sending login:", email, password);
+
   const res = await fetch(`${BASE}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
+  console.log("Response status:", res.status);
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.detail || "Login failed");
   }
-  return res.json(); // { access_token, token_type }
+  const data = await res.json();
+
+  console.log(data); // Now you can log it safely
+  return data;
 }
 
 export async function signup({ full_name, email, password }) {
@@ -28,7 +37,10 @@ export async function signup({ full_name, email, password }) {
 
 export async function getCurrentUser(token) {
   const res = await fetch(`${BASE}/auth/me`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true", //  bypass header
+    },
   });
   if (!res.ok) throw new Error("Unauthorized");
   return res.json(); // { user: { sub: full_name, exp: ... } }

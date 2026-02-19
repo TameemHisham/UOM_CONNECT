@@ -17,7 +17,6 @@ export const checkAuth = async () => {
   }
 };
 
-// FIX 3: Removed 'async' so these return strings/null synchronously, not Promises
 export const getToken = () => {
   return localStorage.getItem("token") || sessionStorage.getItem("token");
 };

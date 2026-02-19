@@ -44,10 +44,9 @@ function SignupForm() {
         password: formData.password,
       });
 
-      // FIX 4: The token is now valid and retrieved from the updated backend
       localStorage.setItem("token", data.access_token);
 
-      // FIX 5: Redirect straight to chat instead of login
+      //  Redirect straight to chat instead of login
       navigate("/chat");
     } catch (err) {
       setError(err.message);
@@ -75,7 +74,7 @@ function SignupForm() {
         <h1 className="title">Create Account</h1>
         <p className="subtitle">Sign up to get started with UOM Connect</p>
 
-        {/* {error && <div className="error-message">{error}</div>} */}
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -141,7 +140,6 @@ function SignupForm() {
 
         <p className="login-text">
           Already have an account?{" "}
-          {/* FIX 6: Changed link to /login to stop the circular root redirect */}
           <Link to="/login" className="login-link">
             Sign in
           </Link>

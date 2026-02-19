@@ -41,7 +41,6 @@ export default function Sidebar({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // FIX: Added optional chaining (g?.name) so the app doesn't crash if a group is malformed
   const filtered = groups.filter((g) =>
     g?.name?.toLowerCase().includes(search.toLowerCase()),
   );
@@ -64,7 +63,6 @@ export default function Sidebar({
     setError("");
     try {
       const token = getToken();
-      // FIX: Pass inputVal FIRST, token SECOND
       const newGroup = await createGroup(inputVal.trim(), token);
       onGroupsChange([...groups, newGroup]);
       onSelectGroup(newGroup.id);
@@ -82,7 +80,6 @@ export default function Sidebar({
     setError("");
     try {
       const token = getToken();
-      // FIX: Pass inputVal FIRST, token SECOND
       const res = await joinGroup(inputVal.trim(), token);
       const already = groups.find((g) => g.id === res.group.id);
       if (!already) onGroupsChange([...groups, res.group]);
@@ -124,7 +121,6 @@ export default function Sidebar({
         )}
       </div>
 
-      {/* Search */}
       <div className={styles.searchWrap}>
         <svg
           width="13"
@@ -146,7 +142,6 @@ export default function Sidebar({
         />
       </div>
 
-      {/* Action buttons */}
       <div className={styles.actions}>
         <button
           className={styles.actionBtn}
@@ -187,7 +182,6 @@ export default function Sidebar({
         </button>
       </div>
 
-      {/* Group list */}
       <div className={styles.list}>
         {filtered.length === 0 && (
           <p className={styles.emptyHint}>
@@ -206,7 +200,6 @@ export default function Sidebar({
         ))}
       </div>
 
-      {/* Modals */}
       {modal && (
         <div className={styles.overlay} onClick={closeModal}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>

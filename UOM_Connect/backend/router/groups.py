@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 from sqlalchemy.orm import Session
 from db.db_config import SessionLocal
-from db.models import Group, User, GroupMember
+from db.models import Group, User, GroupMember, Message
 from router.auth import get_current_user
 from schemas.groups import GroupCreate, GroupJoin, GroupInvite
 
@@ -23,7 +23,6 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS=False,
 )
 
-# FIX: only ONE router definition — second definition was silently wiping /invite
 router = APIRouter(prefix="/groups", tags=["groups"])
 
 
@@ -45,7 +44,7 @@ def _group_to_dict(g: Group) -> dict:
 @router.post("/invite")
 async def send_invite(
     body: GroupInvite,
-    current_user: dict = Depends(get_current_user)  # Add this
+    current_user: dict = Depends(get_current_user)
 ):
     """Send an email invite with the join code."""
     message = MessageSchema(
@@ -116,3 +115,33 @@ def get_my_groups(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return [_group_to_dict(g) for g in user.groups]
+
+
+@router.get("/{group_id}/messages")
+def get_group_messages(
+    group_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Fetch all past messages for a specific group"""
+    #  Verify user exists
+    user = db.query(User).filter(User.full_name == current_user["sub"]).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    # Check if the group exists and the user is actually a member of it
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if not group or user not in group.members:
+        raise HTTPException(
+            status_code=403, detail="Not a member of this group")
+    messages = db.query(Message).filter(Message.group_id ==
+                                        group_id).order_by(Message.timestamp.asc()).all()
+
+    return [
+        {
+            "id": msg.id,
+            "sender": msg.sender.full_name,
+            "text": msg.content,
+            "time": msg.timestamp.strftime("%H:%M")
+        }
+        for msg in messages
+    ]

@@ -58,7 +58,6 @@ function LoginForm() {
         <h1 className="title">UOM Connect</h1>
         <p className="subtitle">Sign in to your account to continue</p>
 
-        {/* FIX: error display was commented out — now active */}
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
