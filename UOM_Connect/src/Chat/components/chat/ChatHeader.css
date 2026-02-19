@@ -1,0 +1,49 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0eaff;
+  flex-shrink: 0;
+  flex-direction: row;
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+}
+.header_name {
+  color: #6b2c91;
+}
+.members {
+  font-size: 12px;
+  color: #9a7dc7;
+  margin-top: 1px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b2c91;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #f3f0ff;
+}
