@@ -30,10 +30,18 @@ body {
 }
 
 .profile-image {
-    display: block;
+    color: white;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: #6b2c91;
+    border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
-    width: 15%;
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
 }
 
@@ -102,7 +110,8 @@ body {
 }
 
 .study-groups-container {
-    max-height: 240px;
+    min-height: 290px;
+    max-height: 290px;
     overflow: scroll;
     scrollbar-width: none;
     margin-bottom: 25px;
