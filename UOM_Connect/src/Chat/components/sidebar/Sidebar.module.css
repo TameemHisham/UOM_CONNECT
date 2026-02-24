@@ -294,3 +294,21 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.profileButton {
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6b2c91;
+  font-weight: 550;
+  text-decoration: none;
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.profileButton:hover {
+  background-color: rgb(223, 223, 223);
+}

@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
-// import { clearToken } from "../utils/auth";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { clearToken } from "../utils/auth";
 import "./ProfilePage.css"
 
 function ProfilePage() {
@@ -10,17 +11,48 @@ function ProfilePage() {
         groups: ["COMP16412", "COMP11120", "COMP13212", "COMP11212", "COMP11212", "COMP11212", "COMP11212", "COMP11212"]
     }
 
+    const [modal, setModal] = useState(null);
+
+    const openModal = (type) => {
+        setModal(type);
+    };
+
+    const closeModal = () => {
+        setModal(null);
+    };
+
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // clearToken();
+        clearToken();
         navigate("/login");
+    };
+
+    const groupClicked = () => {
+        navigate("/chat");
     };
 
 
     return (
         <div className="background-container">
             <div className="profile-container">
+                <Link to="/chat">
+                    <svg
+                        className="return-icon"
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6b2c91"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>    
+                </Link>
+
                 <div className="profile-image">{userInfo.initials}</div>
                 <h1 className="full-name">{userInfo.fullName}</h1>
 
@@ -83,16 +115,58 @@ function ProfilePage() {
                 <div className="study-groups-container">
                     {userInfo.groups.map((group) => {
                         return (
-                            <button className="study-group">{group}</button>
+                            <button className="study-group" onClick={groupClicked}>{group}</button>
                         )
                     })}
                 </div>
 
                 <div className="buttons-container">
-                    <button className="edit-profile-button">Edit Profile</button>
-                    <button className="sign-out-button" onClick={handleLogout}>Sign Out</button>
+                    <button 
+                        className="edit-profile-button" 
+                        onClick={() => openModal("create")}
+                    >
+                    Edit Profile
+                    </button>
+
+                    <button 
+                        className="sign-out-button" 
+                        onClick={handleLogout}
+                    >
+                    Sign Out
+                    </button>
                 </div>
             </div>
+        
+            {modal && (
+                <div className="overlay" onClick={closeModal}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <h3 className="modalTitle">
+                            Edit Profile Details
+                        </h3>
+
+                        <input
+                            className="modalInput"
+                            placeholder="e.g. hello"
+                            autofocus
+                        />
+
+                        <div className="modalBtns">
+                            <button 
+                                className="modalCancel" 
+                                onClick={closeModal}
+                            >
+                            Cancel
+                            </button>
+
+                            <button 
+                            className="modalConfirm"
+                            >
+                            Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import LoginForm from "./LoginForm/LoginForm";
 import SignupForm from "./SignupForm/SignupForm";
+import ProfilePage from "./ProfilePage/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Chat from "./Chat/Chat";
 import JoinPage from "./JoinPage/JoinPage";
@@ -41,6 +42,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Chat />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
