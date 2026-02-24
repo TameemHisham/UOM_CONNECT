@@ -1,17 +1,27 @@
-import ProfileImage from "./user.png";
+import { useNavigate } from "react-router-dom";
+// import { clearToken } from "../utils/auth";
 import "./ProfilePage.css"
 
 function ProfilePage() {
     const userInfo = {
         fullName: "Book C.",
+        initials: "BC",
         email: "napat.chollabud@student.manchester.ac.uk",
         groups: ["COMP16412", "COMP11120", "COMP13212", "COMP11212", "COMP11212", "COMP11212", "COMP11212", "COMP11212"]
     }
 
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // clearToken();
+        navigate("/login");
+    };
+
+
     return (
         <div className="background-container">
             <div className="profile-container">
-                <img src={ProfileImage} className="profile-image" />
+                <div className="profile-image">{userInfo.initials}</div>
                 <h1 className="full-name">{userInfo.fullName}</h1>
 
                 <div className="contact-info-header">
@@ -80,7 +90,7 @@ function ProfilePage() {
 
                 <div className="buttons-container">
                     <button className="edit-profile-button">Edit Profile</button>
-                    <button className="sign-out-button">Sign Out</button>
+                    <button className="sign-out-button" onClick={handleLogout}>Sign Out</button>
                 </div>
             </div>
         </div>
