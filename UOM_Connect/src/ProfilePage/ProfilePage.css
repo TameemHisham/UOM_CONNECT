@@ -29,6 +29,15 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+.return-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.return-icon:hover {
+    stroke: #9c58ca;
+}
+
 .profile-image {
     color: white;
     font-size: 35px;
@@ -110,8 +119,8 @@ body {
 }
 
 .study-groups-container {
-    min-height: 290px;
-    max-height: 290px;
+    min-height: 240px;
+    max-height: 240px;
     overflow: scroll;
     scrollbar-width: none;
     margin-bottom: 25px;
@@ -128,6 +137,10 @@ body {
     cursor: pointer;
     margin-bottom: 5px;
     padding: 15px;
+}
+
+.study-group:hover {
+    background-color: rgb(223, 223, 223);
 }
 
 .buttons-container {
@@ -149,6 +162,10 @@ body {
 
 }
 
+.edit-profile-button:hover {
+    background-color: #5a2579;
+}
+
 .sign-out-button {
     width: 50%;
     height: 30px;
@@ -160,3 +177,100 @@ body {
     cursor: pointer;
 }
 
+.sign-out-button:hover {
+  background-color: rgb(223, 223, 223);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  width: 600px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modalTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e0a2e;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.modalSub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  color: #1e0a2e;
+  transition: border-color 0.15s;
+}
+
+.modalInput:focus {
+  border-color: #6b2c91;
+}
+
+.modalBtns {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.modalCancel {
+  padding: 9px 18px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.13s;
+}
+
+.modalCancel:hover {
+  background: #f9fafb;
+}
+
+.modalConfirm {
+  padding: 9px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #6b2c91;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.13s;
+}
+
+.modalConfirm:hover {
+  background: #5a2579;
+}
+.modalConfirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import { createGroup, joinGroup } from "../../../api/groups";
 import { getToken } from "../../../utils/auth";
@@ -112,6 +113,10 @@ export default function Sidebar({
             </svg>
           </div>
           <span className={styles.brandName}>UOM Connect</span>
+          <Link to="/profile" className={styles.profileButton}>
+            BC
+          </Link>
+          
         </div>
         {currentUser && (
           <div className={styles.userChip}>
