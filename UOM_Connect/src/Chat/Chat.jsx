@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./components/sidebar/Sidebar";
 import ChatPanel from "./components/chat/ChatPanel";
 import { getCurrentUser } from "../api/auth";
 import { getUserGroups, getGroupMessages } from "../api/groups";
 import "./Chat.css";
-import { getToken, clearToken } from "../utils/auth";
+import { getToken } from "../utils/auth";
 import "./Chat.css";
 function Chat() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [groups, setGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
@@ -101,15 +102,20 @@ function Chat() {
     };
   }, [selectedGroupId, user]);
 
+  
+  // Handles the selected group from the profile page
+  useEffect(() => {
+    if (location.state?.groupId) {
+      setSelectedGroupId(location.state.groupId);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+
   const handleSend = (text) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(text);
     }
-  };
-
-  const handleLogout = () => {
-    clearToken();
-    navigate("/login");
   };
 
   const selectedGroup = groups.find((g) => g.id === selectedGroupId) ?? null;
@@ -165,23 +171,6 @@ function Chat() {
           </div>
         )}
       </div>
-
-      <button className="logoutBtn" onClick={handleLogout} title="Sign out">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-          <polyline points="16 17 21 12 16 7" />
-          <line x1="21" y1="12" x2="9" y2="12" />
-        </svg>
-      </button>
     </div>
   );
 }

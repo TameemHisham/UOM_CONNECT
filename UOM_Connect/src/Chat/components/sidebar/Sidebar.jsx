@@ -113,9 +113,11 @@ export default function Sidebar({
             </svg>
           </div>
           <span className={styles.brandName}>UOM Connect</span>
-          <Link to="/profile" className={styles.profileButton}>
-            BC
-          </Link>
+          {currentUser && (
+            <Link to="/profile" className={styles.profileButton}>
+              {getInitials(currentUser.sub)}
+            </Link>
+          )}
         </div>
         {currentUser && (
           <div className={styles.userChip}>
