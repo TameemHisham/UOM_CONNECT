@@ -1,37 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { clearToken } from "../utils/auth";
+import { getCurrentUser } from "../api/auth";
+import { getUserGroups } from "../api/groups";
+import { getToken, clearToken } from "../utils/auth";
 import "./ProfilePage.css"
 
-function ProfilePage() {
-    const userInfo = {
-        fullName: "Book C.",
-        initials: "BC",
-        email: "napat.chollabud@student.manchester.ac.uk",
-        groups: ["COMP16412", "COMP11120", "COMP13212", "COMP11212", "COMP11212", "COMP11212", "COMP11212", "COMP11212"]
-    }
+function getInitials(name = "") {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
 
+
+function ProfilePage() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [groups, setGroups] = useState([]);
+
+
+    useEffect(() => {
+        const token = getToken();
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+    
+
+        getCurrentUser(token)
+          .then((data) => setUser(data.user))
+          .catch(() => {
+            // clearToken();
+            navigate("/login");
+          });
+    
+
+        getUserGroups(token)
+          .then((data) => setGroups(data || []))
+          .catch(console.error);
+    }, [navigate]);
+
+
+    const groupClicked = (id) => {
+        navigate("/chat", {
+            state: {
+                groupId: id
+            }
+        });
+    };
+
+
+    // For pop up edit profile menu
     const [modal, setModal] = useState(null);
+
 
     const openModal = (type) => {
         setModal(type);
     };
 
+
     const closeModal = () => {
         setModal(null);
     };
 
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         clearToken();
         navigate("/login");
     };
-
-    const groupClicked = () => {
-        navigate("/chat");
-    };
-
+    
 
     return (
         <div className="background-container">
@@ -53,8 +92,8 @@ function ProfilePage() {
                     </svg>    
                 </Link>
 
-                <div className="profile-image">{userInfo.initials}</div>
-                <h1 className="full-name">{userInfo.fullName}</h1>
+                <div className="profile-image">{getInitials(user?.sub)}</div>
+                <h1 className="full-name">{user?.sub}</h1>
 
                 <div className="contact-info-header">
                     <svg
@@ -93,7 +132,7 @@ function ProfilePage() {
                     University Email
                 </div>
 
-                <p className="uni-email">{userInfo.email}</p>
+                <p className="uni-email">{user?.email}</p>
 
                 <div className="study-groups-header">
                     <svg
@@ -113,9 +152,9 @@ function ProfilePage() {
                 </div>
 
                 <div className="study-groups-container">
-                    {userInfo.groups.map((group) => {
+                    {groups.map((group) => {
                         return (
-                            <button className="study-group" onClick={groupClicked}>{group}</button>
+                            <button className="study-group" onClick={() => groupClicked(group.id)}>{group.name}</button>
                         )
                     })}
                 </div>

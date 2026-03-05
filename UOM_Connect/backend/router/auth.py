@@ -18,14 +18,19 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     return payload
 
 
-@router.get("/me")
-def get_me(current_user: dict = Depends(get_current_user)):
-    return {"user": current_user}
-
-
 def get_db():
     with SessionLocal() as session:
         yield session
+
+
+@router.get("/me")
+def get_me(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    current_user_db = db.query(User).filter(
+        (User.full_name == current_user["sub"])
+    ).first()
+
+    current_user["email"] = current_user_db.email   # Add email key/value to current_user dict
+    return {"user": current_user}
 
 
 @router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
