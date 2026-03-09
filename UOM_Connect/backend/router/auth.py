@@ -69,3 +69,40 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
     access_token = create_access_token(data={"sub": db_user.full_name})
     return Token(access_token=access_token, token_type="bearer")
+
+@router.put("/update-profile")
+def update_profile(
+    update_data: dict, 
+    current_user: dict = Depends(get_current_user), 
+    db: Session = Depends(get_db)
+):
+    db_user = db.query(User).filter(User.full_name == current_user["sub"]).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    new_password = update_data.get("password")
+    
+    if new_password:
+        if verify_password(new_password, db_user.password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="New password cannot be the same as your current password"
+            )
+        
+        # Update password with hashed new password
+        db_user.password = hash_password(new_password)
+    
+    # Update name and email
+    db_user.full_name = update_data.get("full_name", db_user.full_name)
+    db_user.email = update_data.get("email", db_user.email)
+
+    db.commit() 
+    db.refresh(db_user)
+
+    return { # Message to terminal as verification to new data
+        "message": "Data received.",
+        "preview": {
+            "name": db_user.full_name,
+            "email": db_user.email
+        }
+    }

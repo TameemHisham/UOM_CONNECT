@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../api/auth";
+import { getCurrentUser, updateProfile } from "../api/auth";
 import { getUserGroups } from "../api/groups";
 import { getToken, clearToken } from "../utils/auth";
 import "./ProfilePage.css"
@@ -52,14 +52,70 @@ function ProfilePage() {
     };
 
 
-    // For pop up edit profile menu
+    // Edit Profile section
     const [modal, setModal] = useState(null);
+    const [editData, setEditData] = useState({
+        full_name: "",
+        email: "",
+        password: "",
+    });
 
-
+    // Update modal to display name & email, but not password (security)
     const openModal = (type) => {
+        setEditData({
+            full_name: user?.sub || "",
+            email: user?.email || "",
+            password: "", 
+        });
+        setError("");
         setModal(type);
     };
 
+    const handleEditChange = (e) => {
+    setEditData({
+        ...editData,
+        [e.target.name]: e.target.value,
+        });
+    };
+
+    // Validate email
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSave = async () => {
+        setError("");
+
+        // Ensure password > 6 in length
+        if (editData.password.length > 0 && editData.password.length < 6) {
+            setError("New password must be at least 6 characters long");
+            return;
+        }
+
+        if (!validateEmail(editData.email)) {
+        setError("Please enter a valid email address (e.g., name@example.com)");
+        return;
+        }
+
+        setLoading(true);
+        try {
+            // Same password?
+            const token = getToken();
+            const response = await updateProfile(token, editData);
+            console.log("Response:", response.message);
+            // Local update
+            setUser({...user, sub: editData.full_name, email: editData.email});
+            closeModal();
+        } catch (err) {
+            setError(err.message || "Failed to update profile"); 
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const closeModal = () => {
         setModal(null);
@@ -183,24 +239,70 @@ function ProfilePage() {
                             Edit Profile Details
                         </h3>
 
-                        <input
-                            className="modalInput"
-                            placeholder="e.g. hello"
-                            autofocus
-                        />
+                        {error && (
+                            <div style={{ 
+                                color: "#d93025", 
+                                backgroundColor: "#fce8e6", 
+                                padding: "10px", 
+                                borderRadius: "8px", 
+                                marginBottom: "15px",
+                                fontSize: "14px",
+                                textAlign: "center" 
+                            }}>
+                                {error}
+                            </div>
+                        )}
+
+                        <div className = "modalField">
+                            <label>Full name</label>
+                            <input 
+                                className="modalInput"
+                                name="full_name"
+                                value={editData.full_name}
+                                onChange={handleEditChange}
+                                placeholder="Enter new name"
+                            />
+                        </div>
+
+                        <div className = "modalField">
+                            <label>Email</label>
+                            <input 
+                                className="modalInput"
+                                name="email"
+                                type="email"
+                                value={editData.email}
+                                onChange={handleEditChange}
+                                placeholder="Enter new email"
+                            />
+                        </div>
+
+                        <div className = "modalField">
+                            <label>Password</label>
+                            <input 
+                                className="modalInput"
+                                name="password"
+                                type="password"
+                                value={editData.password}
+                                onChange={handleEditChange}
+                                placeholder="Enter new password"
+                            />
+                        </div>
 
                         <div className="modalBtns">
                             <button 
                                 className="modalCancel" 
                                 onClick={closeModal}
+                                disabled={loading}
                             >
                             Cancel
                             </button>
 
                             <button 
-                            className="modalConfirm"
+                                className="modalConfirm"
+                                onClick={handleSave}
+                                disabled={loading}
                             >
-                            Save
+                                {loading ? "Saving..." : "Save"} 
                             </button>
                         </div>
                     </div>

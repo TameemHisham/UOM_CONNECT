@@ -274,3 +274,16 @@ body {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.modalField {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    text-align: left;
+}
+.modalField label {
+    font-size: 0.8rem;
+    color: #6b2c91;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
