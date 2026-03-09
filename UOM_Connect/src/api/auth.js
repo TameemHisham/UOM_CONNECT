@@ -46,3 +46,27 @@ export async function getCurrentUser(token) {
   if (!res.ok) throw new Error("Unauthorized");
   return res.json(); // { user: { sub: full_name, exp: ... } }
 }
+
+export async function updateProfile(token, { full_name, email, password }) {
+  const res = await fetch(`${BASE}/auth/update-profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
+    },
+    body: JSON.stringify({ 
+        full_name: full_name, 
+        email: email, 
+        password: password || undefined 
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.detail || "Update failed");
+  }
+
+  return data;
+}
