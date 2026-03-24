@@ -26,6 +26,7 @@ export const createGroup = async (name, token) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     },
     body: JSON.stringify({ name }),
   });
@@ -42,6 +43,7 @@ export const joinGroup = async (joinCode, token) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     },
     body: JSON.stringify({ join_code: joinCode }),
   });
@@ -58,6 +60,7 @@ export const sendInviteEmail = async (email, joinCode, token) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "true",
     },
     body: JSON.stringify({ email, join_code: joinCode }),
   });

@@ -20,6 +20,7 @@ export const checkAuth = async () => {
 export const getToken = () => {
   return localStorage.getItem("token") || sessionStorage.getItem("token");
 };
+export const saveToken = (token) => localStorage.setItem("token", token);
 
 export const clearToken = () => {
   localStorage.removeItem("token");
