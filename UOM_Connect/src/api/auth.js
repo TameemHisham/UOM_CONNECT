@@ -1,8 +1,8 @@
 // const BASE = "http://localhost:8000";
-const BASE = "http://localhost:8000";
+// const BASE = "http://localhost:8000";
 // const BASE = "http://192.168.1.42:8000";
 // const BASE = "https://unlucent-averie-unprecipitantly.ngrok-free.dev";
-// const BASE = import.meta.env.VITE_API_URL;
+const BASE = import.meta.env.VITE_API_URL;
 console.log(BASE);
 export async function login({ email, password }) {
   console.log("Sending login:", email, password);
@@ -55,10 +55,10 @@ export async function updateProfile(token, { full_name, email, password }) {
       Authorization: `Bearer ${token}`,
       "ngrok-skip-browser-warning": "true",
     },
-    body: JSON.stringify({ 
-        full_name: full_name, 
-        email: email, 
-        password: password || undefined 
+    body: JSON.stringify({
+      full_name: full_name,
+      email: email,
+      password: password || undefined,
     }),
   });
 

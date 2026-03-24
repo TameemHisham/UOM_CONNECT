@@ -7,6 +7,8 @@ import { getUserGroups, getGroupMessages } from "../api/groups";
 import "./Chat.css";
 import { getToken } from "../utils/auth";
 import "./Chat.css";
+// const WEBSOCKET_ENDPOINT = import.meta.env.WEBSOCKET_ENDPOINT;
+
 function Chat() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,8 +67,11 @@ function Chat() {
       // `ws://http://10.204.191.97:5173/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
       //
       // );
+      // const ws = new WebSocket(
+      //   `ws://10.204.191.97:8000/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
+      // );
       const ws = new WebSocket(
-        `ws://10.204.191.97:8000/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
+        `wss://unlucent-averie-unprecipitantly.ngrok-free.dev/ws/${selectedGroupId}/${encodeURIComponent(user.sub)}`,
       );
       socketRef.current = ws;
 
@@ -102,7 +107,6 @@ function Chat() {
     };
   }, [selectedGroupId, user]);
 
-  
   // Handles the selected group from the profile page
   useEffect(() => {
     if (location.state?.groupId) {
@@ -110,7 +114,6 @@ function Chat() {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, navigate, location.pathname]);
-
 
   const handleSend = (text) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
