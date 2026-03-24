@@ -104,7 +104,7 @@ def update_profile(
 
     return {
         "message": "Data received.",
-        "access_token": new_token,        # ← return it
+        "access_token": new_token,        # <=============== return it
         "token_type": "bearer",
         "preview": {
             "name": db_user.full_name,
