@@ -36,6 +36,8 @@ class User(Base):
     role: Mapped[str] = mapped_column(String(20), default="user")
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow)
+    #added tags column to match db
+    tags: Mapped[str | None] = mapped_column(Text, nullable=True)
     # This connects back to the Group.members relationship
     groups = relationship(
         "Group", secondary="group_members", back_populates="members")

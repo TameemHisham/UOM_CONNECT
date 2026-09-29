@@ -189,6 +189,36 @@ function ProfilePage() {
 
         <p className="uni-email">{user?.email}</p>
 
+        <div className="tags-header">
+          <svg
+            className="tag-icon"
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#6b2c91"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20.59 13.41 11 23l-9-9V3h11l9.59 9.59a2 2 0 0 1 0 2.82z" />
+            <path d="M7 7h.01" />
+          </svg>
+          My Tags
+        </div>
+
+        <div className="tags-container">
+          {user?.tags?.length ? (
+            user.tags.map((tag) => (
+              <span key={tag} className="profile-tag">
+                {tag}
+              </span>
+            ))
+          ) : (
+            <p className="no-tags">No tags added yet.</p>
+          )}
+        </div>
+
         <div className="study-groups-header">
           <svg
             className="chat-icon"

@@ -9,6 +9,7 @@ function SignupForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    tags: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,6 +43,11 @@ function SignupForm() {
         full_name: formData.full_name,
         email: formData.email,
         password: formData.password,
+        // convert tags to array for submission
+        tags: formData.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
       });
 
       localStorage.setItem("token", data.access_token);
@@ -129,6 +135,19 @@ function SignupForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlfor="tags">Tags</label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder="e.g. AI, maths, backend"
+              value={formData.tags}
+              onChange={handleChange}
               disabled={loading}
             />
           </div>

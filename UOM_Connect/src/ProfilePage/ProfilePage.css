@@ -143,6 +143,46 @@ body {
     background-color: rgb(223, 223, 223);
 }
 
+.tags-header {
+    display: flex;
+    align-items: center;
+    color: #6b2c91;
+    gap: 5px;
+    margin-bottom: 2px;
+}
+
+.tags-container {
+    margin-left: 30px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.profile-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background-color: #f1e8f8;
+    color: #6b2c91;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tag-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.no-tags {
+    font-size: 15px;
+    color: rgb(84, 84, 84);
+}
+
+
 .buttons-container {
     display: flex;
     align-items: center;

@@ -7,6 +7,7 @@ from auth.hash_utils import hash_password, verify_password
 from auth.jwt_handler import create_access_token, decode_access_token
 from schemas.auth import UserSignup, UserLogin, Token
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import json
 
 security = HTTPBearer()
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -33,6 +34,7 @@ def get_me(current_user: dict = Depends(get_current_user), db: Session = Depends
 
     current_user["email"] = current_user_db.email
     current_user["full_name"] = current_user_db.full_name
+    current_user["tags"] = json.loads(current_user_db.tags) if current_user_db.tags else []
     return {"user": current_user}
 
 
@@ -49,8 +51,15 @@ def signup(user: UserSignup, db: Session = Depends(get_db)):
         )
 
     hashed_pwd = hash_password(user.password)
+    #cleaning user input
+    cleaned_tags = [
+        tag.strip()
+        for tag in user.tags
+        if tag.strip()
+    ]
     new_user = User(full_name=user.full_name,
-                    email=user.email, password=hashed_pwd)
+                    email=user.email, password=hashed_pwd,
+                    tags=json.dumps(cleaned_tags)) #adds tags to profile as well
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

@@ -22,11 +22,11 @@ export async function login({ email, password }) {
   return data;
 }
 
-export async function signup({ full_name, email, password }) {
+export async function signup({ full_name, email, password, tags }) {
   const res = await fetch(`${BASE}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ full_name, email, password }),
+    body: JSON.stringify({ full_name, email, password, tags }),
   });
   if (!res.ok) {
     const err = await res.json();
